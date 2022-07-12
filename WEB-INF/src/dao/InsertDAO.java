@@ -3,15 +3,19 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+/*
+ * メモをDBに追加する為の"insertメソッド"を定義する。
+ */
+
 public class InsertDAO extends DAO {
-	public void insert(String title,String text)throws Exception{
+	public void insert(String title, String text) throws Exception {
 
 		Connection con = getConnection();
 
-		PreparedStatement st=con.prepareStatement(
-		"insert into memo values('sample123',?,?,now());");
+		PreparedStatement st = con.prepareStatement(
+				"insert into memo values('sample123',?,?,now());");
 		st.setString(1, title);
-		st.setString(2,text);
+		st.setString(2, text);
 		st.executeUpdate();
 
 		st.close();

@@ -22,39 +22,41 @@ public class MemoAppMain extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		List<Memo>memoList=new ArrayList<Memo>();
+		// -- ここから -- DBからメモ一覧を抽出
+		List<Memo> memoList = new ArrayList<Memo>();
 		try {
-			memoList=new DisplayDAO().display();
+			memoList = new DisplayDAO().display();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		request.setAttribute("memoList", memoList);
+		// -- ここまで --
 
 		String view = "/WEB-INF/jsp/index.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(view);
 		dispatcher.forward(request, response);
 	}
 
-	 @Override
-	    public void doPost(HttpServletRequest request, HttpServletResponse response)
-	            throws ServletException, IOException {
-		 request.setCharacterEncoding("UTF-8");
-		 String title=request.getParameter("title");
-		 String text=request.getParameter("text");
-	        System.out.println("title:" + title);
-	        System.out.println("text: " + text);
+	@Override
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		String title = request.getParameter("title");
+		String text = request.getParameter("text");
 
-	        // -- ここにDBへ保存処理 --
-	        List<Memo>memoList=new ArrayList<Memo>();
-			try {
-				new InsertDAO().insert(title,text);
-				memoList=new DisplayDAO().display();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			request.setAttribute("memoList", memoList);
+		// -- ここから -- DBからメモ一覧を抽出
+		List<Memo> memoList = new ArrayList<Memo>();
+		try {
+			// -- ここでDBの保存処理 --
+			new InsertDAO().insert(title, text);
 
+			memoList = new DisplayDAO().display();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		request.setAttribute("memoList", memoList);
+		// -- ここまで --
 
-	        response.sendRedirect(".");
-	    }
+		response.sendRedirect(".");
+	}
 }
